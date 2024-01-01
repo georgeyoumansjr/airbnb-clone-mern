@@ -20,8 +20,7 @@ cloudinary.config({
 });
 
 const app = express();
-const server = require('http').createServer(app);
-const io = socketIo(server);
+
 
 // For handling cookies
 app.use(cookieParser())
@@ -50,6 +49,7 @@ app.use('/', require('./routes'));
 const reviewRouter = require("./routes/review");
 app.use("/review", reviewRouter);
 
+
 app.listen(process.env.PORT || 8000, (err) => {
   if (err) {
     console.log('Error in connecting to server: ', err);
@@ -57,11 +57,20 @@ app.listen(process.env.PORT || 8000, (err) => {
   console.log(`Server is running on port no. ${process.env.PORT}`);
 });
 
+const server = require('http').createServer(app);
+const io = socketIo(server,{
+  pingTimeout: 60000,
+  cors: {
+    origin: "*",
+    // credentials: true,
+  },
+});
+
 
 io.on('connection', (socket) => {
   console.log('A user connected');
 
-  // Handle disconnection
+  
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
