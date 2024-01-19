@@ -2,4 +2,4 @@ node_modules/
 .env
 .env.production
 .env.development
-client/dist/
+client/dist/*
